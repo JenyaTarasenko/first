@@ -1,0 +1,19 @@
+print('Hello world')
+
+
+
+def classwark(request):
+    return render(request,'hello.html'{'title': "Helloworld"})
+
+
+
+from django.http import HttpResponse, HttpResponseNotFound
+from .models import *
+
+
+category =["Список товаров",  "Страница категорий"]
+
+menu = [{'title': "О сайте", 'url_name': 'about'},
+        {'title': "Довать статью", 'url_name': 'add_page'},
+        {'title': "Обратная связь", 'url_name': 'contact'},
+        {'title': "Войти", 'url_name': 'login'}]
