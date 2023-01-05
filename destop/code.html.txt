@@ -1,0 +1,93 @@
+
+from django.http import HttpResponse, HttpResponseNotFound, Http404
+from .models import *
+
+
+category =["Список товаров",  "Страница категорий"]
+
+menu = [{'title': "О сайте", 'url_name': 'about'},
+        {'title': "Довать статью", 'url_name': 'add_page'},
+        {'title': "Обратная связь", 'url_name': 'contact'},
+        {'title': "Войти", 'url_name': 'login'}]
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse, HttpResponseNotFound, Http404
+from .models import *
+
+
+category =["Список товаров",  "Страница категорий"]
+
+menu = [{'title': "О сайте", 'url_name': 'about'},
+        {'title': "Довать статью", 'url_name': 'add_page'},
+        {'title': "Обратная связь", 'url_name': 'contact'},
+        {'title': "Войти", 'url_name': 'login'}]
+
+
+
+
+def index(request):
+    posts = Women.objects.all()
+    return render(request, 'women/index.html', {'posts': posts, 'menu': menu, 'title': 'Главная страница' })
+
+
+# первое представление
+#def index(request):
+   # return render(request, 'women/index.html', {'menu': menu, 'title': "Главная страница"})
+
+def about(request):
+    return render(request, 'women/about.html', {'category': category, 'title': "Страница О НАС"})
+
+def addpage(request):
+     return HttpResponse("Добавить статью")
+
+def contact(request):
+    return HttpResponse("Контакты")
+
+def login(request):
+    return HttpResponse("Авторизация")
+
+def pageNotFound(request, exception):
+    return HttpResponseNotFound('<h1>Ваша страница не найдена</h1>')
+
+#посты  отображение статьи
+#def show_post(request, post_id):
+    #return HttpResponse(f"Отображение статьи с id={post_id}
+
+# отображение статьи ро идентификатору
+
+def show_post(request, post_id):
+    post = get_object_or_404(Women, pk=post_id)
+
+
+    context = {
+        'post': post,
+        'menu': menu,
+        'title': post.title,
+        'cat_selected': post.cat_id,
+
+    }
+    return render(request, 'women/post.html', context=context)
+
+
+
+
+# категория
+def show_category(request, cat_id):
+    posts = Women.objects.filter(cat_id=cat_id)
+
+
+    if len(posts) == 0:
+        raise Http404()
+
+    context = {
+        'post': posts,
+        'menu': menu,
+        'title': "Отображение по рубрикам",
+        'cat_selected': cat_id,
+    }
+    return render(request, 'women/index.html', context=context)
+
+
+
+
+
